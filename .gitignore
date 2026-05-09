@@ -1,0 +1,8 @@
+.env
+*.json
+!.env.example
+agent.log
+__pycache__/
+*.py[cod]
+.venv/
+venv/
