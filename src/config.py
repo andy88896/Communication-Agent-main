@@ -36,11 +36,5 @@ INBOX_EMAILS = {
     "secondary": SECONDARY_EMAIL,
 }
 
-LABEL_COLORS = {
-    "Career Opportunities": {"backgroundColor": "#16a765", "textColor": "#ffffff"},
-    "AI News":             {"backgroundColor": "#4986e7", "textColor": "#ffffff"},
-    "Cryptocurrency News": {"backgroundColor": "#ffad46", "textColor": "#ffffff"},
-    "Business News":       {"backgroundColor": "#ff7537", "textColor": "#ffffff"},
-}
 
 CLAUDE_MODEL = "claude-sonnet-4-6"
