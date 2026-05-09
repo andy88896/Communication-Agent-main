@@ -25,7 +25,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-CATEGORIES = ["Job Applications", "AI News", "Cryptocurrency News"]
+CATEGORIES = ["Career Opportunities", "AI News", "Cryptocurrency News", "Business News"]
 
 
 def parse_args():
@@ -81,7 +81,7 @@ def _parse_sender(raw_sender: str) -> tuple[str, str]:
 
 def build_digest(run_log: run_logger_module.RunLogger, inboxes: list[str], time_range: str) -> str:
     counts = run_log.get_counts()
-    job_emails = run_log.get_job_application_emails()
+    job_emails = run_log.get_career_opportunity_emails()
 
     lines = [
         f"Email Agent — Run summary {date.today().strftime('%Y-%m-%d')}",
@@ -90,9 +90,10 @@ def build_digest(run_log: run_logger_module.RunLogger, inboxes: list[str], time_
         "",
         "── Summary ──────────────────────────────",
         f"  Total emails processed:   {counts['emails_processed']}",
-        f"  Job Applications:         {counts['labelled_job_applications']}",
+        f"  Career Opportunities:      {counts['labelled_career_opportunities']}",
         f"  AI News:                  {counts['labelled_ai_news']}",
         f"  Cryptocurrency News:      {counts['labelled_cryptocurrency_news']}",
+        f"  Business News:            {counts['labelled_business_news']}",
         f"  Drafts created:           {counts['drafts_created']}",
         f"  Notion items added:       {counts['notion_items_created']}",
         f"  Unmatched / skipped:      {counts['unmatched']}",
@@ -100,7 +101,7 @@ def build_digest(run_log: run_logger_module.RunLogger, inboxes: list[str], time_
     ]
 
     if job_emails:
-        lines.append("── Job Application emails requiring attention ──")
+        lines.append("── Career Opportunity emails requiring attention ──")
         for e in job_emails:
             lines.append(f"  [{e['inbox']}] {e['sender']}  |  {e['subject']}")
         lines.append("")
@@ -168,7 +169,7 @@ def process_inbox(inbox: str, after_date: date, run_log: run_logger_module.RunLo
                 logger.error(f"Failed to apply label to {eid}: {e}")
                 run_log.log_error(f"Label apply failed {eid}: {e}")
 
-        if result.category == "Job Applications" and result.reply_required:
+        if result.category == "Career Opportunities" and result.reply_required:
             try:
                 time.sleep(0.5)
                 draft_body = generate_draft(subject, sender, email["body"])
@@ -196,7 +197,7 @@ def process_inbox(inbox: str, after_date: date, run_log: run_logger_module.RunLo
             except Exception as e:
                 logger.error(f"Draft/Notion failed for {eid}: {e}")
                 run_log.log_error(f"Draft/Notion failed {eid}: {e}")
-                run_log.log_email(inbox, eid, subject, sender, "labelled_job_applications")
+                run_log.log_email(inbox, eid, subject, sender, "labelled_career_opportunities")
 
         elif result.category == "Unmatched":
             run_log.log_email(inbox, eid, subject, sender, "unmatched")

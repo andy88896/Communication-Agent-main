@@ -140,14 +140,11 @@ class GmailClient:
             if lbl["name"] == name:
                 return lbl["id"]
 
-        color = config.LABEL_COLORS.get(name, {})
         body = {
             "name": name,
             "labelListVisibility": "labelShow",
             "messageListVisibility": "show",
         }
-        if color:
-            body["color"] = color
 
         created = self._service.users().labels().create(userId="me", body=body).execute()
         logger.info(f"Created label '{name}' in {self.inbox} inbox")

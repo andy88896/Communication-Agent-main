@@ -94,9 +94,10 @@ If you run the agent without `--days` or `--since`, it will print an error and e
 For each email in the specified time range:
 
 1. **Classifies** the email using the Claude API into one of:
-   - `Job Applications` → green label
+   - `Career Opportunities` → green label
    - `AI News` → blue label
    - `Cryptocurrency News` → yellow label
+   - `Business News` → orange label
    - Unmatched → no action
 
 2. **Applies the Gmail label** (creates labels on first run if they don't exist)
