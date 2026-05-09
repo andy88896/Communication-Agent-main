@@ -37,7 +37,7 @@ INBOX_EMAILS = {
 }
 
 LABEL_COLORS = {
-    "Job Applications":    {"backgroundColor": "#16a765", "textColor": "#ffffff"},
+    "Career Opportunities": {"backgroundColor": "#16a765", "textColor": "#ffffff"},
     "AI News":             {"backgroundColor": "#4986e7", "textColor": "#ffffff"},
     "Cryptocurrency News": {"backgroundColor": "#ffad46", "textColor": "#ffffff"},
 }
