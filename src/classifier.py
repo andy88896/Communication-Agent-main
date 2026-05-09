@@ -22,7 +22,7 @@ def _get_client() -> anthropic.Anthropic:
 _SYSTEM = """You are an email classification assistant. You will be given the subject, sender, and body of an email.
 
 Your task is to:
-1. Classify the email into exactly one of the following categories: "Career Opportunities", "AI News", "Cryptocurrency News", or "Unmatched".
+1. Classify the email into exactly one of the following categories: "Career Opportunities", "AI News", "Cryptocurrency News", "Business News", or "Unmatched".
 2. If the category is "Career Opportunities", determine whether the email requires a reply from the recipient.
 3. Return your response as a JSON object only. No explanation, no preamble.
 
@@ -30,9 +30,10 @@ Classification rules:
 - "Career Opportunities": any email related to job searching, recruiting, interviews, hiring, assessments, offers, or rejections.
 - "AI News": newsletters, articles, or updates about artificial intelligence, ML, LLMs, AI companies, or AI policy.
 - "Cryptocurrency News": newsletters, price alerts, or updates about crypto, blockchain, DeFi, or Web3.
+- "Business News": newsletters, articles, or updates about the economy, markets, equities, stocks, business strategy, marketing, or corporate news.
 - "Unmatched": anything else.
 
-If an email could fit multiple categories, apply this priority: Career Opportunities > AI News > Cryptocurrency News.
+If an email could fit multiple categories, apply this priority: Career Opportunities > AI News > Cryptocurrency News > Business News.
 
 Reply-required logic (only applies to Career Opportunities):
 - reply_required: true — if the email asks a question, invites scheduling, requests documents, or requires acknowledgement
@@ -40,7 +41,7 @@ Reply-required logic (only applies to Career Opportunities):
 
 Response format:
 {
-  "category": "Career Opportunities" | "AI News" | "Cryptocurrency News" | "Unmatched",
+  "category": "Career Opportunities" | "AI News" | "Cryptocurrency News" | "Business News" | "Unmatched",
   "reply_required": true | false | null,
   "reply_required_reason": "brief reason string or null",
   "confidence": "high" | "medium" | "low"

@@ -7,7 +7,8 @@ _PATH = "run_log.json"
 
 _OUTCOME_FIELDS = {
     "labelled_career_opportunities":  "labelled_career_opportunities",
-    "labelled_ai_news":           "labelled_ai_news",
+    "labelled_ai_news":               "labelled_ai_news",
+    "labelled_business_news":         "labelled_business_news",
     "labelled_cryptocurrency_news": "labelled_cryptocurrency_news",
     "draft_created":              "drafts_created",
     "notion_item_created":        "notion_items_created",
@@ -24,6 +25,7 @@ class RunLogger:
             "labelled_career_opportunities": 0,
             "labelled_ai_news":             0,
             "labelled_cryptocurrency_news": 0,
+            "labelled_business_news":       0,
             "drafts_created":               0,
             "notion_items_created":         0,
             "unmatched":                    0,
@@ -46,6 +48,8 @@ class RunLogger:
             self._counts["labelled_ai_news"] += 1
         elif outcome == "labelled_cryptocurrency_news":
             self._counts["labelled_cryptocurrency_news"] += 1
+        elif outcome == "labelled_business_news":
+            self._counts["labelled_business_news"] += 1
         elif outcome in ("unmatched", "low_confidence_unmatched", "decode_error"):
             self._counts["unmatched"] += 1
 

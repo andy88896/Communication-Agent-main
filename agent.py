@@ -25,7 +25,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-CATEGORIES = ["Career Opportunities", "AI News", "Cryptocurrency News"]
+CATEGORIES = ["Career Opportunities", "AI News", "Cryptocurrency News", "Business News"]
 
 
 def parse_args():
@@ -93,6 +93,7 @@ def build_digest(run_log: run_logger_module.RunLogger, inboxes: list[str], time_
         f"  Career Opportunities:      {counts['labelled_career_opportunities']}",
         f"  AI News:                  {counts['labelled_ai_news']}",
         f"  Cryptocurrency News:      {counts['labelled_cryptocurrency_news']}",
+        f"  Business News:            {counts['labelled_business_news']}",
         f"  Drafts created:           {counts['drafts_created']}",
         f"  Notion items added:       {counts['notion_items_created']}",
         f"  Unmatched / skipped:      {counts['unmatched']}",

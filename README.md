@@ -97,6 +97,7 @@ For each email in the specified time range:
    - `Career Opportunities` → green label
    - `AI News` → blue label
    - `Cryptocurrency News` → yellow label
+   - `Business News` → orange label
    - Unmatched → no action
 
 2. **Applies the Gmail label** (creates labels on first run if they don't exist)
