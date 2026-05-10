@@ -94,7 +94,7 @@ class GmailClient:
         if inbox not in ("primary", "secondary"):
             raise ValueError(f"inbox must be 'primary' or 'secondary', got '{inbox}'")
         self.inbox = inbox
-        self.email = config.INBOX_EMAILS[inbox]
+        self.email = config.INBOX_EMAILS(inbox)
         creds = _build_credentials(inbox)
         self._service = build("gmail", "v1", credentials=creds)
 

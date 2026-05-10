@@ -195,7 +195,7 @@ def process_inbox(inbox: str, after_date: date, run_log: run_logger_module.RunLo
                 sender_name=sender_name,
                 sender_email=sender_email,
                 received_date=email["date"],
-                inbox_email=config.INBOX_EMAILS[inbox],
+                inbox_email=config.INBOX_EMAILS(inbox),
                 summary=f"Draft reply created. {result.reply_required_reason or ''}".strip(),
             )
             if notion_ok:
@@ -243,7 +243,7 @@ def main():
     try:
         primary_gmail = GmailClient("primary")
         primary_gmail.send_message(
-            to=config.PRIMARY_EMAIL,
+            to=config.PRIMARY_EMAIL(),
             subject=digest_subject,
             body=digest_body,
         )
