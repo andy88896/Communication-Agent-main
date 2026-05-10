@@ -5,18 +5,6 @@ from typing import Any
 
 _PATH = "run_log.json"
 
-_OUTCOME_FIELDS = {
-    "labelled_career_opportunities":  "labelled_career_opportunities",
-    "labelled_ai_news":               "labelled_ai_news",
-    "labelled_business_news":         "labelled_business_news",
-    "labelled_cryptocurrency_news": "labelled_cryptocurrency_news",
-    "draft_created":              "drafts_created",
-    "notion_item_created":        "notion_items_created",
-    "unmatched":                  "unmatched",
-    "low_confidence_unmatched":   "unmatched",
-    "decode_error":               "errors",
-}
-
 
 class RunLogger:
     def __init__(self):
