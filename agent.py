@@ -160,6 +160,7 @@ def process_inbox(inbox: str, after_date: date, run_log: run_logger_module.RunLo
         if result.confidence == "low":
             logger.info(f"Low confidence for '{subject}' — skipping label")
             run_log.log_email(inbox, eid, subject, sender, "low_confidence_unmatched")
+            dedup.mark_processed(inbox, eid)
             continue
 
         if result.category in label_ids:
@@ -173,31 +174,32 @@ def process_inbox(inbox: str, after_date: date, run_log: run_logger_module.RunLo
             try:
                 time.sleep(0.5)
                 draft_body = generate_draft(subject, sender, email["body"])
-
                 gmail.create_draft(
                     to=sender,
                     subject=f"Re: {subject}",
                     body=draft_body,
                     thread_id=email["thread_id"],
                 )
-
-                sender_name, sender_email = _parse_sender(sender)
-                notion_writer.append_action_item(
-                    subject=subject,
-                    sender_name=sender_name,
-                    sender_email=sender_email,
-                    received_date=email["date"],
-                    inbox_email=config.INBOX_EMAILS[inbox],
-                    summary=f"Draft reply created. {result.reply_required_reason or ''}".strip(),
-                )
-
                 run_log.log_email(inbox, eid, subject, sender, "draft_created")
                 logger.info(f"Draft created for '{subject}' from {sender}")
-
             except Exception as e:
-                logger.error(f"Draft/Notion failed for {eid}: {e}")
-                run_log.log_error(f"Draft/Notion failed {eid}: {e}")
+                logger.error(f"Draft creation failed for {eid}: {e}")
+                run_log.log_error(f"Draft failed {eid}: {e}")
                 run_log.log_email(inbox, eid, subject, sender, "labelled_career_opportunities")
+                dedup.mark_processed(inbox, eid)
+                continue
+
+            sender_name, sender_email = _parse_sender(sender)
+            notion_ok = notion_writer.append_action_item(
+                subject=subject,
+                sender_name=sender_name,
+                sender_email=sender_email,
+                received_date=email["date"],
+                inbox_email=config.INBOX_EMAILS[inbox],
+                summary=f"Draft reply created. {result.reply_required_reason or ''}".strip(),
+            )
+            if notion_ok:
+                run_log.log_notion_item()
 
         elif result.category == "Unmatched":
             run_log.log_email(inbox, eid, subject, sender, "unmatched")

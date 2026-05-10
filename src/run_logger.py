@@ -39,7 +39,6 @@ class RunLogger:
         if outcome == "draft_created":
             self._counts["drafts_created"] += 1
             self._counts["labelled_career_opportunities"] += 1
-            self._counts["notion_items_created"] += 1
             self._career_opportunity_emails.append({"inbox": inbox, "subject": subject, "sender": sender})
         elif outcome == "labelled_career_opportunities":
             self._counts["labelled_career_opportunities"] += 1
@@ -52,6 +51,9 @@ class RunLogger:
             self._counts["labelled_business_news"] += 1
         elif outcome in ("unmatched", "low_confidence_unmatched", "decode_error"):
             self._counts["unmatched"] += 1
+
+    def log_notion_item(self) -> None:
+        self._counts["notion_items_created"] += 1
 
     def log_error(self, message: str) -> None:
         self._errors.append(message)
