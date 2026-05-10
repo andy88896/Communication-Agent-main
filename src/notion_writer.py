@@ -7,6 +7,7 @@ from src import config
 
 logger = logging.getLogger(__name__)
 
+_NOTION_RATE_DELAY = 0.35
 _client = None
 
 
@@ -57,7 +58,7 @@ def append_action_item(
 
     try:
         client.blocks.children.append(block_id=page_id, children=blocks)
-        time.sleep(0.35)
+        time.sleep(_NOTION_RATE_DELAY)
         return True
     except Exception as e:
         logger.error(f"Notion write failed for '{subject}': {e}")

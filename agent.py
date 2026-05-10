@@ -26,9 +26,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 CATEGORIES = ["Career Opportunities", "AI News", "Cryptocurrency News", "Business News"]
+_CLAUDE_RATE_DELAY = 0.5
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Email Inbox Management Agent",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -51,7 +52,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def resolve_after_date(args) -> tuple[date, str]:
+def resolve_after_date(args: argparse.Namespace) -> tuple[date, str]:
     if args.days is not None:
         after = date.today() - timedelta(days=args.days)
         return after, f"last {args.days} days"
@@ -154,7 +155,7 @@ def process_inbox(inbox: str, after_date: date, run_log: run_logger_module.RunLo
             dedup.mark_processed(inbox, eid)
             continue
 
-        time.sleep(0.5)
+        time.sleep(_CLAUDE_RATE_DELAY)
         result = classify_email(subject, sender, email["body"])
 
         if result.confidence == "low":
@@ -172,7 +173,7 @@ def process_inbox(inbox: str, after_date: date, run_log: run_logger_module.RunLo
 
         if result.category == "Career Opportunities" and result.reply_required:
             try:
-                time.sleep(0.5)
+                time.sleep(_CLAUDE_RATE_DELAY)
                 draft_body = generate_draft(subject, sender, email["body"])
                 gmail.create_draft(
                     to=sender,
@@ -210,7 +211,7 @@ def process_inbox(inbox: str, after_date: date, run_log: run_logger_module.RunLo
         dedup.mark_processed(inbox, eid)
 
 
-def main():
+def main() -> None:
     args = parse_args()
     after_date, time_range_desc = resolve_after_date(args)
 
