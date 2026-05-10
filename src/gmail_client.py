@@ -8,7 +8,6 @@ from email.mime.multipart import MIMEMultipart
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
@@ -94,7 +93,7 @@ class GmailClient:
         if inbox not in ("primary", "secondary"):
             raise ValueError(f"inbox must be 'primary' or 'secondary', got '{inbox}'")
         self.inbox = inbox
-        self.email = config.INBOX_EMAILS[inbox]
+        self.email = config.INBOX_EMAILS(inbox)
         creds = _build_credentials(inbox)
         self._service = build("gmail", "v1", credentials=creds)
 

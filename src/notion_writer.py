@@ -7,6 +7,7 @@ from src import config
 
 logger = logging.getLogger(__name__)
 
+_NOTION_RATE_DELAY = 0.35
 _client = None
 
 
@@ -24,7 +25,7 @@ def append_action_item(
     received_date: str,
     inbox_email: str,
     summary: str,
-) -> None:
+) -> bool:
     page_id = config.NOTION_PAGE_ID()
     client = _get_client()
 
@@ -57,6 +58,8 @@ def append_action_item(
 
     try:
         client.blocks.children.append(block_id=page_id, children=blocks)
-        time.sleep(0.35)
+        time.sleep(_NOTION_RATE_DELAY)
+        return True
     except Exception as e:
         logger.error(f"Notion write failed for '{subject}': {e}")
+        return False

@@ -16,21 +16,6 @@ SCOPES = [
     "https://www.googleapis.com/auth/gmail.modify",
 ]
 
-INBOXES = [
-    {
-        "name": "primary",
-        "email": "andrewch810@gmail.com",
-        "token_env": "GMAIL_TOKEN_PRIMARY",
-        "token_file": "token_primary.json",
-    },
-    {
-        "name": "secondary",
-        "email": "andrewcn196@gmail.com",
-        "token_env": "GMAIL_TOKEN_SECONDARY",
-        "token_file": "token_secondary.json",
-    },
-]
-
 
 def print_prereqs():
     print("""
@@ -87,6 +72,10 @@ def print_env_instructions(results: list[dict]):
 
 Copy .env.example to .env, then fill in the values below.
 
+Add your email addresses:
+  GMAIL_EMAIL_PRIMARY=<your primary Gmail address>
+  GMAIL_EMAIL_SECONDARY=<your secondary Gmail address>
+
 Your credentials JSON file contents go into GMAIL_CREDENTIALS_PRIMARY
 and GMAIL_CREDENTIALS_SECONDARY (both accounts can use the same
 credentials JSON — paste the raw file contents as a single line).
@@ -114,13 +103,24 @@ Once your .env is configured, run:
 def main():
     print_prereqs()
 
+    primary_email   = input("Primary Gmail address: ").strip()
+    secondary_email = input("Secondary Gmail address: ").strip()
+    if not primary_email or not secondary_email:
+        print("Both email addresses are required. Exiting.")
+        sys.exit(1)
+
+    inboxes = [
+        {"name": "primary",   "email": primary_email,   "token_env": "GMAIL_TOKEN_PRIMARY",   "token_file": "token_primary.json"},
+        {"name": "secondary", "email": secondary_email, "token_env": "GMAIL_TOKEN_SECONDARY", "token_file": "token_secondary.json"},
+    ]
+
     credentials_path = input("Enter the path to your downloaded credentials JSON file: ").strip()
     if not credentials_path:
         print("No path provided. Exiting.")
         sys.exit(1)
 
     results = []
-    for inbox in INBOXES:
+    for inbox in inboxes:
         try:
             token = authenticate_inbox(inbox, credentials_path)
             results.append({"inbox": inbox, "token": token, "ok": True})

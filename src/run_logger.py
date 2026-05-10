@@ -5,18 +5,6 @@ from typing import Any
 
 _PATH = "run_log.json"
 
-_OUTCOME_FIELDS = {
-    "labelled_career_opportunities":  "labelled_career_opportunities",
-    "labelled_ai_news":               "labelled_ai_news",
-    "labelled_business_news":         "labelled_business_news",
-    "labelled_cryptocurrency_news": "labelled_cryptocurrency_news",
-    "draft_created":              "drafts_created",
-    "notion_item_created":        "notion_items_created",
-    "unmatched":                  "unmatched",
-    "low_confidence_unmatched":   "unmatched",
-    "decode_error":               "errors",
-}
-
 
 class RunLogger:
     def __init__(self):
@@ -39,7 +27,6 @@ class RunLogger:
         if outcome == "draft_created":
             self._counts["drafts_created"] += 1
             self._counts["labelled_career_opportunities"] += 1
-            self._counts["notion_items_created"] += 1
             self._career_opportunity_emails.append({"inbox": inbox, "subject": subject, "sender": sender})
         elif outcome == "labelled_career_opportunities":
             self._counts["labelled_career_opportunities"] += 1
@@ -52,6 +39,9 @@ class RunLogger:
             self._counts["labelled_business_news"] += 1
         elif outcome in ("unmatched", "low_confidence_unmatched", "decode_error"):
             self._counts["unmatched"] += 1
+
+    def log_notion_item(self) -> None:
+        self._counts["notion_items_created"] += 1
 
     def log_error(self, message: str) -> None:
         self._errors.append(message)
