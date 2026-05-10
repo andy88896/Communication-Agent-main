@@ -3,20 +3,9 @@ import logging
 import re
 from dataclasses import dataclass
 
-import anthropic
-
-from src import config
+from src import anthropic_client, config
 
 logger = logging.getLogger(__name__)
-
-_client = None
-
-
-def _get_client() -> anthropic.Anthropic:
-    global _client
-    if _client is None:
-        _client = anthropic.Anthropic()
-    return _client
 
 
 _SYSTEM = """You are an email classification assistant. You will be given the subject, sender, and body of an email.
@@ -60,7 +49,7 @@ def classify_email(subject: str, sender: str, body: str) -> ClassificationResult
     prompt = f"Subject: {subject}\nFrom: {sender}\n\nBody:\n{body[:4000]}"
 
     try:
-        response = _get_client().messages.create(
+        response = anthropic_client.get().messages.create(
             model=config.CLAUDE_MODEL,
             max_tokens=256,
             system=_SYSTEM,

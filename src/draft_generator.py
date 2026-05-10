@@ -1,19 +1,8 @@
 import logging
 
-import anthropic
-
-from src import config
+from src import anthropic_client, config
 
 logger = logging.getLogger(__name__)
-
-_client = None
-
-
-def _get_client() -> anthropic.Anthropic:
-    global _client
-    if _client is None:
-        _client = anthropic.Anthropic()
-    return _client
 
 
 _SYSTEM = """You are a professional email assistant helping to draft replies on behalf of a job applicant. Your writing style is warm and professional — friendly but polished.
@@ -37,7 +26,7 @@ def generate_draft(original_subject: str, sender: str, body: str) -> str:
     )
 
     try:
-        response = _get_client().messages.create(
+        response = anthropic_client.get().messages.create(
             model=config.CLAUDE_MODEL,
             max_tokens=512,
             system=_SYSTEM,
